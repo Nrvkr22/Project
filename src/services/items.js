@@ -44,68 +44,89 @@ export const getItem = async (itemId) => {
 
 // Get all active items with optional filters
 export const getItems = async (filters = {}, lastDoc = null, pageSize = 12) => {
-    let q = query(
-        collection(db, ITEMS_COLLECTION),
-        where('status', '==', 'active'),
-        orderBy('createdAt', 'desc')
-    );
-
-    // Apply category filter
-    if (filters.category && filters.category !== 'All') {
-        q = query(
+    try {
+        // Simple query without orderBy to avoid index requirement
+        let q = query(
             collection(db, ITEMS_COLLECTION),
             where('status', '==', 'active'),
-            where('category', '==', filters.category),
-            orderBy('createdAt', 'desc')
+            limit(pageSize)
         );
+
+        // Apply category filter
+        if (filters.category && filters.category !== 'All') {
+            q = query(
+                collection(db, ITEMS_COLLECTION),
+                where('status', '==', 'active'),
+                where('category', '==', filters.category),
+                limit(pageSize)
+            );
+        }
+
+        const querySnapshot = await getDocs(q);
+        const items = [];
+        let lastVisible = null;
+
+        querySnapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() });
+            lastVisible = doc;
+        });
+
+        // Sort by createdAt client-side
+        items.sort((a, b) => {
+            const dateA = a.createdAt?.toDate?.() || new Date(0);
+            const dateB = b.createdAt?.toDate?.() || new Date(0);
+            return dateB - dateA;
+        });
+
+        return { items, lastVisible };
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        // If it's an index error, log helpful message
+        if (error.code === 'failed-precondition') {
+            console.error('Firestore index required. Check console for link to create it.');
+        }
+        return { items: [], lastVisible: null };
     }
-
-    // Apply pagination
-    if (lastDoc) {
-        q = query(q, startAfter(lastDoc), limit(pageSize));
-    } else {
-        q = query(q, limit(pageSize));
-    }
-
-    const querySnapshot = await getDocs(q);
-    const items = [];
-    let lastVisible = null;
-
-    querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() });
-        lastVisible = doc;
-    });
-
-    return { items, lastVisible };
 };
 
 // Get items by user ID
 export const getUserItems = async (userId, status = null) => {
-    let q;
+    try {
+        let q;
 
-    if (status) {
-        q = query(
-            collection(db, ITEMS_COLLECTION),
-            where('userId', '==', userId),
-            where('status', '==', status),
-            orderBy('createdAt', 'desc')
-        );
-    } else {
-        q = query(
-            collection(db, ITEMS_COLLECTION),
-            where('userId', '==', userId),
-            orderBy('createdAt', 'desc')
-        );
+        if (status) {
+            // Simple query without orderBy
+            q = query(
+                collection(db, ITEMS_COLLECTION),
+                where('userId', '==', userId),
+                where('status', '==', status)
+            );
+        } else {
+            q = query(
+                collection(db, ITEMS_COLLECTION),
+                where('userId', '==', userId)
+            );
+        }
+
+        const querySnapshot = await getDocs(q);
+        const items = [];
+
+        querySnapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort by createdAt client-side
+        items.sort((a, b) => {
+            const dateA = a.createdAt?.toDate?.() || new Date(0);
+            const dateB = b.createdAt?.toDate?.() || new Date(0);
+            return dateB - dateA;
+        });
+
+        return items;
+    } catch (error) {
+        console.error('Error fetching user items:', error);
+        return [];
     }
-
-    const querySnapshot = await getDocs(q);
-    const items = [];
-
-    querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() });
-    });
-
-    return items;
 };
 
 // Search items by title
@@ -113,49 +134,53 @@ export const searchItems = async (searchTerm, filters = {}) => {
     // Note: Firestore doesn't support full-text search natively
     // For production, consider Algolia or Elasticsearch
     // This is a simple prefix search
-    const q = query(
-        collection(db, ITEMS_COLLECTION),
-        where('status', '==', 'active'),
-        orderBy('createdAt', 'desc'),
-        limit(50)
-    );
+    try {
+        const q = query(
+            collection(db, ITEMS_COLLECTION),
+            where('status', '==', 'active'),
+            limit(50)
+        );
 
-    const querySnapshot = await getDocs(q);
-    const items = [];
-    const searchLower = searchTerm.toLowerCase();
+        const querySnapshot = await getDocs(q);
+        const items = [];
+        const searchLower = searchTerm.toLowerCase();
 
-    querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (
-            data.title.toLowerCase().includes(searchLower) ||
-            data.description.toLowerCase().includes(searchLower)
-        ) {
-            // Apply additional filters
-            let matches = true;
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (
+                data.title.toLowerCase().includes(searchLower) ||
+                data.description.toLowerCase().includes(searchLower)
+            ) {
+                // Apply additional filters
+                let matches = true;
 
-            if (filters.category && filters.category !== 'All' && data.category !== filters.category) {
-                matches = false;
-            }
-            if (filters.location && data.location !== filters.location) {
-                matches = false;
-            }
-            if (filters.condition && data.condition !== filters.condition) {
-                matches = false;
-            }
-            if (filters.minPrice && data.price < filters.minPrice) {
-                matches = false;
-            }
-            if (filters.maxPrice && data.price > filters.maxPrice) {
-                matches = false;
-            }
+                if (filters.category && filters.category !== 'All' && data.category !== filters.category) {
+                    matches = false;
+                }
+                if (filters.location && data.location !== filters.location) {
+                    matches = false;
+                }
+                if (filters.condition && data.condition !== filters.condition) {
+                    matches = false;
+                }
+                if (filters.minPrice && data.price < filters.minPrice) {
+                    matches = false;
+                }
+                if (filters.maxPrice && data.price > filters.maxPrice) {
+                    matches = false;
+                }
 
-            if (matches) {
-                items.push({ id: doc.id, ...data });
+                if (matches) {
+                    items.push({ id: doc.id, ...data });
+                }
             }
-        }
-    });
+        });
 
-    return items;
+        return items;
+    } catch (error) {
+        console.error('Error searching items:', error);
+        return [];
+    }
 };
 
 // Update an item

@@ -23,11 +23,36 @@ const Browse = () => {
         fetchItems();
     }, []);
 
+    // Apply client-side filters for location, condition, price
+    const applyClientFilters = (items, filters) => {
+        return items.filter((item) => {
+            // Location filter
+            if (filters.location && item.location !== filters.location) {
+                return false;
+            }
+            // Condition filter
+            if (filters.condition && item.condition !== filters.condition) {
+                return false;
+            }
+            // Min price filter
+            if (filters.minPrice && item.price < parseFloat(filters.minPrice)) {
+                return false;
+            }
+            // Max price filter
+            if (filters.maxPrice && item.price > parseFloat(filters.maxPrice)) {
+                return false;
+            }
+            return true;
+        });
+    };
+
     const fetchItems = async () => {
         setLoading(true);
         try {
             const { items: fetchedItems } = await getItems({ category: filters.category });
-            setItems(fetchedItems);
+            // Apply additional filters client-side
+            const filteredItems = applyClientFilters(fetchedItems, filters);
+            setItems(filteredItems);
         } catch (error) {
             console.error('Error fetching items:', error);
         } finally {
@@ -42,11 +67,13 @@ const Browse = () => {
         try {
             if (searchTerm.trim()) {
                 const results = await searchItems(searchTerm, filters);
+                // searchItems already applies filters
                 setItems(results);
                 setSearchParams({ search: searchTerm, ...filters });
             } else {
                 const { items: fetchedItems } = await getItems(filters);
-                setItems(fetchedItems);
+                const filteredItems = applyClientFilters(fetchedItems, filters);
+                setItems(filteredItems);
                 setSearchParams(filters);
             }
         } catch (error) {
@@ -68,7 +95,8 @@ const Browse = () => {
                 setItems(results);
             } else {
                 const { items: fetchedItems } = await getItems(filters);
-                setItems(fetchedItems);
+                const filteredItems = applyClientFilters(fetchedItems, filters);
+                setItems(filteredItems);
             }
             setShowFilters(false);
         } catch (error) {
@@ -79,16 +107,22 @@ const Browse = () => {
     };
 
     const clearFilters = () => {
-        setFilters({
+        const clearedFilters = {
             category: 'All',
             condition: '',
             location: '',
             minPrice: '',
             maxPrice: '',
-        });
+        };
+        setFilters(clearedFilters);
         setSearchTerm('');
-        fetchItems();
         setSearchParams({});
+        // Fetch without filters
+        setLoading(true);
+        getItems({ category: 'All' }).then(({ items: fetchedItems }) => {
+            setItems(fetchedItems);
+            setLoading(false);
+        });
     };
 
     return (

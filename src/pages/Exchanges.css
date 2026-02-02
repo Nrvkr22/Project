@@ -13,10 +13,163 @@
     border-bottom: 1px solid var(--border);
 }
 
+/* Exchange Card */
 .exchanges-list {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+}
+
+.exchange-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.exchange-card:hover {
+    border-color: var(--border-hover);
+}
+
+.exchange-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.exchange-item {
+    display: flex;
+    align-items: center;
     gap: 1rem;
+    flex: 1;
+    max-width: 280px;
+}
+
+.exchange-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.exchange-item-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.exchange-item-info .price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.exchange-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.exchange-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.price-diff-badge {
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.exchange-message {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.exchange-message strong {
+    color: var(--text-primary);
+}
+
+.exchange-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.exchange-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.exchange-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.exchange-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.badge-muted {
+    background: rgba(156, 163, 175, 0.2);
+    color: #9ca3af;
+}
+
+.badge-primary {
+    background: rgba(0, 217, 255, 0.2);
+    color: var(--primary);
 }
 
 /* Exchange Info Section */
@@ -68,50 +221,35 @@
     line-height: 1.5;
 }
 
-/* Exchange Card */
-.exchange-card {
-    display: flex;
-    gap: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-}
-
-.exchange-items {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.exchange-item {
-    width: 100px;
-}
-
-.exchange-item img {
-    width: 100%;
-    height: 75px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-}
-
-.exchange-arrow {
-    font-size: 1.5rem;
-}
-
-.exchange-details {
-    flex: 1;
-}
-
-.exchange-status {
-    margin-bottom: 0.5rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .exchange-steps {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
+    }
+
+    .exchange-items {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .exchange-item {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .exchange-arrow {
+        transform: rotate(90deg);
+    }
+
+    .exchange-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .exchange-actions {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -125,6 +263,11 @@
     }
 
     .exchange-card {
-        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .exchange-item img {
+        width: 60px;
+        height: 60px;
     }
 }

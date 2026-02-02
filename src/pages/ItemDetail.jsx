@@ -5,6 +5,7 @@ import { getItem, deleteItem } from '../services/items';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { formatPrice, formatDate } from '../utils/helpers';
+import ProposeExchange from '../components/exchange/ProposeExchange';
 import './ItemDetail.css';
 
 const ItemDetail = () => {
@@ -214,23 +215,15 @@ const ItemDetail = () => {
                 </div>
             )}
 
-            {/* Exchange Modal Placeholder */}
+            {/* Exchange Modal */}
             {showExchangeModal && (
-                <div className="modal-overlay" onClick={() => setShowExchangeModal(false)}>
-                    <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
-                        <h3>Propose Exchange</h3>
-                        <p>Select an item from your listings to exchange.</p>
-                        <p className="text-muted">Exchange feature coming in Phase 3!</p>
-                        <div className="modal-actions">
-                            <button
-                                className="btn btn-secondary"
-                                onClick={() => setShowExchangeModal(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ProposeExchange
+                    targetItem={item}
+                    onClose={() => setShowExchangeModal(false)}
+                    onSuccess={() => {
+                        alert('Exchange proposal sent successfully!');
+                    }}
+                />
             )}
         </div>
     );

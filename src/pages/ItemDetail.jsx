@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getItem, deleteItem } from '../services/items';
+import { createPurchaseRequest, hasPendingPurchase } from '../services/purchases';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { formatPrice, formatDate } from '../utils/helpers';
@@ -11,7 +12,7 @@ import './ItemDetail.css';
 const ItemDetail = () => {
     const { itemId } = useParams();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, userProfile } = useAuth();
 
     const [item, setItem] = useState(null);
     const [seller, setSeller] = useState(null);
@@ -19,10 +20,17 @@ const ItemDetail = () => {
     const [activeImage, setActiveImage] = useState(0);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showBuyConfirm, setShowBuyConfirm] = useState(false);
+    const [buyLoading, setBuyLoading] = useState(false);
+    const [hasPendingBuy, setHasPendingBuy] = useState(false);
 
     useEffect(() => {
         fetchItemAndSeller();
     }, [itemId]);
+
+    useEffect(() => {
+        checkPendingPurchase();
+    }, [user, itemId]);
 
     const fetchItemAndSeller = async () => {
         try {
@@ -43,12 +51,46 @@ const ItemDetail = () => {
         }
     };
 
+    const checkPendingPurchase = async () => {
+        if (user && itemId) {
+            try {
+                const pending = await hasPendingPurchase(itemId, user.uid);
+                setHasPendingBuy(pending);
+            } catch (err) {
+                console.error('Error checking pending purchase:', err);
+            }
+        }
+    };
+
     const handleDelete = async () => {
         try {
             await deleteItem(itemId);
             navigate('/dashboard');
         } catch (error) {
             console.error('Error deleting item:', error);
+        }
+    };
+
+    const handleBuyRequest = async () => {
+        setBuyLoading(true);
+        try {
+            await createPurchaseRequest({
+                itemId: item.id,
+                itemTitle: item.title,
+                itemImage: item.images?.[0] || '',
+                itemPrice: item.price,
+                buyerId: user.uid,
+                buyerName: userProfile?.name || 'Buyer',
+                sellerId: item.userId,
+            });
+            setHasPendingBuy(true);
+            setShowBuyConfirm(false);
+            alert('Buy request sent! The seller will be notified.');
+        } catch (error) {
+            console.error('Error sending buy request:', error);
+            alert('Failed to send buy request. Please try again.');
+        } finally {
+            setBuyLoading(false);
         }
     };
 
@@ -170,6 +212,23 @@ const ItemDetail = () => {
                             </>
                         ) : (
                             <>
+                                {/* Buy Button - for sell_only or open_to_exchange */}
+                                {user && item.exchangeType !== 'exchange_only' && (
+                                    hasPendingBuy ? (
+                                        <button className="btn btn-secondary" disabled>
+                                            ⏳ Buy Request Pending
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn btn-success"
+                                            onClick={() => setShowBuyConfirm(true)}
+                                        >
+                                            🛒 Buy Now
+                                        </button>
+                                    )
+                                )}
+
+                                {/* Exchange Button - for exchange_only or open_to_exchange */}
                                 {user && item.exchangeType !== 'sell_only' && (
                                     <button
                                         className="btn btn-primary"
@@ -178,6 +237,7 @@ const ItemDetail = () => {
                                         🔄 Propose Exchange
                                     </button>
                                 )}
+
                                 {user && seller && (
                                     <Link to={`/chat?userId=${seller.id}&itemId=${item.id}`} className="btn btn-secondary">
                                         💬 Chat with Seller
@@ -215,6 +275,38 @@ const ItemDetail = () => {
                 </div>
             )}
 
+            {/* Buy Confirmation Modal */}
+            {showBuyConfirm && (
+                <div className="modal-overlay" onClick={() => setShowBuyConfirm(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <h3>🛒 Confirm Purchase</h3>
+                        <div className="buy-confirm-item">
+                            <img src={item.images?.[0]} alt={item.title} />
+                            <div>
+                                <h4>{item.title}</h4>
+                                <p className="price">{formatPrice(item.price)}</p>
+                            </div>
+                        </div>
+                        <p>Send a buy request to the seller. They will confirm and you can arrange payment & delivery via chat.</p>
+                        <div className="modal-actions">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => setShowBuyConfirm(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-success"
+                                onClick={handleBuyRequest}
+                                disabled={buyLoading}
+                            >
+                                {buyLoading ? 'Sending...' : 'Send Buy Request'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Exchange Modal */}
             {showExchangeModal && (
                 <ProposeExchange
@@ -230,3 +322,4 @@ const ItemDetail = () => {
 };
 
 export default ItemDetail;
+

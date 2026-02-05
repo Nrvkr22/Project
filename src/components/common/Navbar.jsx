@@ -32,6 +32,7 @@ const Navbar = () => {
                                 + Sell / Exchange
                             </Link>
                             <Link to="/exchanges" className="nav-link">Exchanges</Link>
+                            <Link to="/purchases" className="nav-link">Purchases</Link>
                             <Link to="/chat" className="nav-link">Chat</Link>
                             <div className="nav-user">
                                 <Link to="/dashboard" className="nav-avatar">

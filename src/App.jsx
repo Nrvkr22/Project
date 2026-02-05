@@ -12,6 +12,7 @@ import CreateListing from './pages/CreateListing';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Exchanges from './pages/Exchanges';
+import Purchases from './pages/Purchases';
 import Chat from './pages/Chat';
 import './index.css';
 
@@ -71,6 +72,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Exchanges />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/purchases"
+                element={
+                  <ProtectedRoute>
+                    <Purchases />
                   </ProtectedRoute>
                 }
               />

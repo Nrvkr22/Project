@@ -2,6 +2,12 @@
     background: var(--bg-dark);
 }
 
+.rated-badge {
+    color: #10b981;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
 .exchanges-content {
     padding: 2rem 5%;
 }

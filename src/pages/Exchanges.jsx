@@ -11,6 +11,8 @@ import {
     completeExchange
 } from '../services/exchanges';
 import { markItemAsExchanged } from '../services/items';
+import { hasRatedExchange } from '../services/ratings';
+import RateUser from '../components/ratings/RateUser';
 import { formatPrice, formatDate } from '../utils/helpers';
 import './Exchanges.css';
 
@@ -161,6 +163,7 @@ const Exchanges = () => {
                             <ExchangeCard
                                 key={exchange.id}
                                 exchange={exchange}
+                                currentUserId={user.uid}
                                 isReceived={activeTab === 'received'}
                                 isSent={activeTab === 'sent'}
                                 isCompleted={activeTab === 'completed'}
@@ -207,6 +210,7 @@ const Exchanges = () => {
 
 const ExchangeCard = ({
     exchange,
+    currentUserId,
     isReceived,
     isSent,
     isCompleted,
@@ -216,7 +220,24 @@ const ExchangeCard = ({
     onComplete,
     actionLoading
 }) => {
+    const [showRateModal, setShowRateModal] = useState(false);
+    const [hasRated, setHasRated] = useState(false);
     const isLoading = actionLoading === exchange.id;
+
+    useEffect(() => {
+        if (isCompleted && currentUserId) {
+            checkIfRated();
+        }
+    }, [isCompleted, currentUserId]);
+
+    const checkIfRated = async () => {
+        try {
+            const rated = await hasRatedExchange(exchange.id, currentUserId);
+            setHasRated(rated);
+        } catch (err) {
+            console.error('Error checking rating:', err);
+        }
+    };
 
     const getStatusBadge = (status) => {
         const badges = {
@@ -336,10 +357,35 @@ const ExchangeCard = ({
                             💬 Chat
                         </Link>
                     )}
+
+                    {isCompleted && !hasRated && (
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => setShowRateModal(true)}
+                        >
+                            ⭐ Rate
+                        </button>
+                    )}
+
+                    {isCompleted && hasRated && (
+                        <span className="rated-badge">✓ Rated</span>
+                    )}
                 </div>
             </div>
+
+            {showRateModal && (
+                <RateUser
+                    exchange={exchange}
+                    currentUserId={currentUserId}
+                    onClose={() => setShowRateModal(false)}
+                    onSuccess={() => {
+                        setHasRated(true);
+                    }}
+                />
+            )}
         </div>
     );
 };
 
 export default Exchanges;
+

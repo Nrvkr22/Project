@@ -99,9 +99,9 @@ const Chat = () => {
     }, [activeConversation, user]);
 
     // Auto-scroll to bottom when new messages arrive
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    // useEffect(() => {
+    //     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // }, [messages]);
 
     const startNewConversation = async (otherUserId, itemId = null) => {
         try {
@@ -302,7 +302,6 @@ const Chat = () => {
                                         </div>
                                     ))
                                 )}
-                                <div ref={messagesEndRef} />
                             </div>
 
                             <form className="message-input" onSubmit={handleSendMessage}>

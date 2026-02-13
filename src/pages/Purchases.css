@@ -11,6 +11,13 @@
     gap: 0.5rem;
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.purchases-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .purchases-list {

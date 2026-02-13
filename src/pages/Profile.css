@@ -166,4 +166,9 @@
     .profile-content {
         padding: 1.5rem 1rem;
     }
+
+    .profile-items-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
 }

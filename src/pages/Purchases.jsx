@@ -32,20 +32,10 @@ const Purchases = () => {
             let data;
             if (activeTab === 'received') {
                 // Seller sees incoming buy requests
-                const pending = await getReceivedPurchases(user.uid, 'pending');
-                const confirmed = await getReceivedPurchases(user.uid, 'confirmed');
-                data = [...pending, ...confirmed];
-                data.sort((a, b) => {
-                    const dateA = a.createdAt?.toDate?.() || new Date(0);
-                    const dateB = b.createdAt?.toDate?.() || new Date(0);
-                    return dateB - dateA;
-                });
+                data = await getReceivedPurchases(user.uid);
             } else {
-                // Buyer sees their purchase requests
-                const allSent = await getSentPurchases(user.uid);
-                data = allSent.filter(p =>
-                    p.status === 'pending' || p.status === 'confirmed'
-                );
+                // Buyer sees their purchase requests / orders
+                data = await getSentPurchases(user.uid);
             }
             setPurchases(data);
         } catch (error) {

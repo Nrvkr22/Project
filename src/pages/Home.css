@@ -297,7 +297,7 @@
 
     .hero-content {
         text-align: center;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
 
     .hero-content h1 {
@@ -309,7 +309,7 @@
     }
 
     .hero-visual {
-        height: 300px;
+        height: 250px;
         width: 100%;
     }
 
@@ -317,22 +317,83 @@
         flex-direction: column;
         gap: 2rem;
     }
+
+    .how-it-works h2,
+    .categories-section h2,
+    .cta-section h2 {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .hero {
+        padding: 2rem 1rem;
+    }
+
     .hero-content h1 {
-        font-size: 2rem;
+        font-size: 1.75rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
     }
 
     .hero-actions {
         flex-direction: column;
+        width: 100%;
     }
 
-    .btn {
+    .hero-actions .btn {
         width: 100%;
+    }
+
+    .hero-visual {
+        height: 200px;
+    }
+
+    .hero-card {
+        padding: 1rem;
+    }
+
+    .card-emoji {
+        font-size: 2rem;
+    }
+
+    .card-label {
+        font-size: 0.85rem;
+    }
+
+    .exchange-arrow {
+        font-size: 2.5rem;
+    }
+
+    .how-it-works,
+    .categories-section,
+    .cta-section {
+        padding: 3rem 1rem;
+    }
+
+    .how-it-works h2,
+    .categories-section h2,
+    .cta-section h2 {
+        font-size: 1.5rem;
     }
 
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .category-card {
+        padding: 1.25rem 0.75rem;
+    }
+
+    .category-icon {
+        font-size: 2rem;
+    }
+
+    .cta-content p {
+        font-size: 1rem;
     }
 }

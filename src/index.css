@@ -47,6 +47,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -56,6 +57,8 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 .app {
@@ -410,6 +413,8 @@ img {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
+  min-height: 44px;
 }
 
 .btn-primary {
@@ -471,6 +476,7 @@ img {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .tab-btn:hover {
@@ -541,8 +547,24 @@ img {
     font-size: 1.5rem;
   }
 
+  .page-header p {
+    font-size: 0.95rem;
+  }
+
   .btn {
     padding: 0.625rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .empty-state .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.25rem;
   }
 }

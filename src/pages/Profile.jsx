@@ -137,7 +137,7 @@ const Profile = () => {
                                     onChange={handleImageUpload}
                                     hidden
                                 />
-                                📷
+
                             </label>
                         )}
                     </div>

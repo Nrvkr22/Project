@@ -1,6 +1,6 @@
 .footer {
-    background: linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
     padding: 3rem 2rem 1.5rem;
     margin-top: auto;
 }
@@ -24,7 +24,7 @@
 .footer-logo {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #00d9ff, #7b68ee);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -32,7 +32,7 @@
 
 .footer-brand p {
     margin-top: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     font-size: 0.9rem;
     line-height: 1.6;
 }
@@ -43,7 +43,7 @@
 }
 
 .footer-section h4 {
-    color: #fff;
+    color: var(--text-primary);
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -53,7 +53,7 @@
 
 .footer-section a {
     display: block;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.875rem;
     margin-bottom: 0.5rem;
@@ -61,17 +61,17 @@
 }
 
 .footer-section a:hover {
-    color: #00d9ff;
+    color: var(--primary);
 }
 
 .footer-bottom {
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--border);
     text-align: center;
 }
 
 .footer-bottom p {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 

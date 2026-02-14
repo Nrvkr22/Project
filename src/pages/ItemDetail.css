@@ -1,5 +1,5 @@
 .item-detail-page {
-    background: var(--bg-dark);
+    background: var(--bg-body);
 }
 
 .item-detail-container {
@@ -22,7 +22,7 @@
     position: relative;
     border-radius: var(--radius-xl);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-dark);
     aspect-ratio: 4/3;
 }
 
@@ -105,7 +105,8 @@
 }
 
 .item-description {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
 }
@@ -132,10 +133,11 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
 }
 
 .seller-avatar {
@@ -210,13 +212,13 @@
 }
 
 .btn-danger {
-    background: rgba(255, 82, 82, 0.15);
-    color: #ff5252;
-    border: 1px solid rgba(255, 82, 82, 0.3);
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
 }
 
 .btn-danger:hover {
-    background: #ff5252;
+    background: #ef4444;
     color: #fff;
 }
 
@@ -227,7 +229,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;

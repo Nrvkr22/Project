@@ -4,18 +4,17 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: var(--gradient-bg);
 }
 
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-lg);
 }
 
 .auth-card-register {
@@ -30,23 +29,23 @@
 .auth-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #00d9ff, #7b68ee);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .auth-header p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
 .auth-error {
-  background: rgba(255, 82, 82, 0.15);
-  border: 1px solid rgba(255, 82, 82, 0.3);
-  color: #ff6b6b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
   padding: 0.875rem 1rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
@@ -69,7 +68,7 @@
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
 }
 
 .form-group input,
@@ -77,24 +76,24 @@
 .form-group textarea {
   padding: 0.875rem 1rem;
   font-size: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  background: var(--bg-body);
+  color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
 .form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-muted);
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #00d9ff;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .form-group select {
@@ -102,8 +101,8 @@
 }
 
 .form-group select option {
-  background: #1a1a2e;
-  color: #fff;
+  background: var(--bg-card);
+  color: var(--text-primary);
 }
 
 .auth-btn {
@@ -112,7 +111,7 @@
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, #00d9ff, #7b68ee);
+  background: var(--gradient-primary);
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -121,7 +120,7 @@
 
 .auth-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+  box-shadow: var(--shadow-glow);
 }
 
 .auth-btn:disabled {
@@ -135,19 +134,19 @@
 }
 
 .auth-footer p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .auth-footer a {
-  color: #00d9ff;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .auth-footer a:hover {
-  color: #7b68ee;
+  color: var(--secondary);
 }
 
 /* Loading Screen */
@@ -158,15 +157,15 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--gradient-bg);
+  color: var(--text-secondary);
 }
 
 .loader {
   width: 48px;
   height: 48px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #00d9ff;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

@@ -64,7 +64,7 @@ const CreateListing = () => {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-        const maxImages = 5 - existingImages.length;
+        const maxImages = 5 - existingImages.length - images.length;
 
         if (files.length > maxImages) {
             setError(`You can only upload ${maxImages} more image(s)`);
@@ -84,12 +84,16 @@ const CreateListing = () => {
             return true;
         });
 
-        setImages(validFiles);
+        // Append to existing selections instead of replacing
+        setImages((prev) => [...prev, ...validFiles]);
 
-        // Create previews
+        // Create previews and append
         const previews = validFiles.map((file) => URL.createObjectURL(file));
-        setImagePreviews(previews);
+        setImagePreviews((prev) => [...prev, ...previews]);
         setError('');
+
+        // Reset file input so the same file can be re-selected
+        e.target.value = '';
     };
 
     const removeImage = (index, isExisting = false) => {

@@ -1,5 +1,5 @@
 .create-listing-page {
-    background: var(--bg-dark);
+    background: var(--bg-body);
 }
 
 .create-listing-content {
@@ -9,16 +9,17 @@
 }
 
 .listing-form {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     padding: 2rem;
+    box-shadow: var(--shadow-sm);
 }
 
 .form-error {
-    background: rgba(255, 82, 82, 0.15);
-    border: 1px solid rgba(255, 82, 82, 0.3);
-    color: #ff6b6b;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
     padding: 1rem;
     border-radius: var(--radius-md);
     margin-bottom: 1.5rem;
@@ -49,7 +50,7 @@
 
 /* Image Upload */
 .image-upload-area {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-body);
     border: 2px dashed var(--border);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
@@ -105,7 +106,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-dark);
     border: 2px dashed var(--border);
     border-radius: var(--radius-md);
     color: var(--text-muted);
@@ -144,7 +145,7 @@
     font-size: 1rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-body);
     color: var(--text-primary);
     transition: all 0.3s ease;
 }
@@ -154,7 +155,7 @@
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .form-group textarea {
@@ -183,7 +184,7 @@
 .progress-bar {
     flex: 1;
     height: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-dark);
     border-radius: 4px;
     overflow: hidden;
 }

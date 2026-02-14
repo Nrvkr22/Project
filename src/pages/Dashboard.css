@@ -1,5 +1,5 @@
 .dashboard-page {
-    background: var(--bg-dark);
+    background: var(--bg-body);
     padding-bottom: 3rem;
 }
 
@@ -63,10 +63,11 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-icon {
@@ -124,12 +125,12 @@
 .tab-count {
     padding: 0.125rem 0.5rem;
     font-size: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--primary-light);
     border-radius: 10px;
 }
 
 .tab-btn.active .tab-count {
-    background: rgba(0, 217, 255, 0.2);
+    background: rgba(79, 70, 229, 0.15);
 }
 
 /* Content */
@@ -147,16 +148,17 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1rem;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .dashboard-item-card:hover {
     border-color: var(--border-hover);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card-hover);
 }
 
 .item-image-small {
@@ -206,13 +208,13 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-dark);
     border-radius: var(--radius-sm);
     transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--border);
     color: var(--primary);
 }
 

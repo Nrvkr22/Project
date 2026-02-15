@@ -27,8 +27,10 @@
     flex-shrink: 0;
 }
 
-.logo-icon {
-    font-size: 1.5rem;
+.logo-image {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
 }
 
 .logo-text {

@@ -22,6 +22,18 @@
 }
 
 .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-logo-image {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+}
+
+.footer-logo span {
     font-size: 1.5rem;
     font-weight: 700;
     background: var(--gradient-primary);

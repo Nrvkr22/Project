@@ -6,7 +6,10 @@ const Footer = () => {
             <div className="footer-container">
                 <div className="footer-main">
                     <div className="footer-brand">
-                        <span className="footer-logo">🔄 SwapSphere</span>
+                        <div className="footer-logo">
+                            <img src="/logo.png" alt="SwapSphere" className="footer-logo-image" />
+                            <span>SwapSphere</span>
+                        </div>
                         <p>Buy, Sell & Exchange items with people in your city.</p>
                     </div>
 

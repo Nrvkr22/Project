@@ -26,7 +26,7 @@ const Navbar = () => {
         <nav className="navbar">
             <div className="nav-container">
                 <Link to="/" className="nav-logo" onClick={closeMobileMenu}>
-                    <span className="logo-icon">🔄</span>
+                    <img src="/logo.png" alt="SwapSphere" className="logo-image" />
                     <span className="logo-text">SwapSphere</span>
                 </Link>
 

@@ -180,7 +180,7 @@ const Exchanges = () => {
 
             {/* How Exchange Works */}
             <div className="exchange-info-section">
-                <h2>How Exchanges Work</h2>
+                <h2 style={{ textAlign: 'center' }}>How Exchanges Work</h2>
                 <div className="exchange-steps">
                     <div className="exchange-step">
                         <span className="step-number">1</span>
@@ -271,7 +271,7 @@ const ExchangeCard = ({
                     </div>
                 </div>
 
-                <div className="exchange-arrow">⇄</div>
+
 
                 <div className="exchange-item">
                     <img

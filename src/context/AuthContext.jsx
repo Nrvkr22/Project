@@ -4,7 +4,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    updateProfile
+    updateProfile,
+    sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
@@ -80,6 +81,10 @@ export const AuthProvider = ({ children }) => {
         setUserProfile(null);
     };
 
+    const resetPassword = async (email) => {
+        await sendPasswordResetEmail(auth, email);
+    };
+
     const updateUserProfile = async (updates) => {
         if (!user) throw new Error('No user logged in');
 
@@ -102,6 +107,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        resetPassword,
         updateUserProfile,
         refreshUserProfile,
     };

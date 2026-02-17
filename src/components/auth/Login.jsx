@@ -7,9 +7,11 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
 
-    const { login } = useAuth();
+    const { login, resetPassword } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -18,6 +20,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccess('');
         setLoading(true);
 
         try {
@@ -39,51 +42,125 @@ const Login = () => {
         }
     };
 
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+        setLoading(true);
+
+        try {
+            await resetPassword(email);
+            setSuccess('Password reset email sent! Check your inbox.');
+        } catch (err) {
+            console.error('Password reset error:', err);
+            if (err.code === 'auth/invalid-email') {
+                setError('Please enter a valid email address.');
+            } else if (err.code === 'auth/too-many-requests') {
+                setError('Too many requests. Please try again later.');
+            } else {
+                setError('Failed to send reset email. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const switchToForgotPassword = () => {
+        setForgotPassword(true);
+        setError('');
+        setSuccess('');
+    };
+
+    const switchToLogin = () => {
+        setForgotPassword(false);
+        setError('');
+        setSuccess('');
+    };
+
     return (
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1>Welcome Back</h1>
-                    <p>Sign in to continue to SwapSphere</p>
+                    <h1>{forgotPassword ? 'Reset Password' : 'Welcome Back'}</h1>
+                    <p>
+                        {forgotPassword
+                            ? 'Enter your email and we\'ll send you a reset link'
+                            : 'Sign in to continue to SwapSphere'}
+                    </p>
                 </div>
 
                 {error && <div className="auth-error">{error}</div>}
+                {success && <div className="auth-success">{success}</div>}
 
-                <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email"
-                            required
-                        />
-                    </div>
+                {forgotPassword ? (
+                    <form onSubmit={handleForgotPassword} className="auth-form">
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                required
+                            />
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            required
-                        />
-                    </div>
+                        <button type="submit" className="auth-btn" disabled={loading}>
+                            {loading ? 'Sending...' : 'Send Reset Link'}
+                        </button>
 
-                    <button type="submit" className="auth-btn" disabled={loading}>
-                        {loading ? 'Signing in...' : 'Sign In'}
-                    </button>
-                </form>
+                        <div className="auth-footer">
+                            <p>
+                                Remember your password?{' '}
+                                <button type="button" className="back-to-login" onClick={switchToLogin}>
+                                    Back to Login
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+                ) : (
+                    <>
+                        <form onSubmit={handleSubmit} className="auth-form">
+                            <div className="form-group">
+                                <label htmlFor="email">Email</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                            </div>
 
-                <div className="auth-footer">
-                    <p>
-                        Don't have an account? <Link to="/register">Sign Up</Link>
-                    </p>
-                </div>
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                                <button type="button" className="forgot-password-link" onClick={switchToForgotPassword}>
+                                    Forgot Password?
+                                </button>
+                            </div>
+
+                            <button type="submit" className="auth-btn" disabled={loading}>
+                                {loading ? 'Signing in...' : 'Sign In'}
+                            </button>
+                        </form>
+
+                        <div className="auth-footer">
+                            <p>
+                                Don't have an account? <Link to="/register">Sign Up</Link>
+                            </p>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

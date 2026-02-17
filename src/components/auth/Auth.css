@@ -128,6 +128,51 @@
   cursor: not-allowed;
 }
 
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.25rem;
+  align-self: flex-end;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.auth-success {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.back-to-login {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.back-to-login:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
 .auth-footer {
   margin-top: 1.5rem;
   text-align: center;

@@ -7,7 +7,7 @@ const Footer = () => {
                 <div className="footer-main">
                     <div className="footer-brand">
                         <div className="footer-logo">
-                            <img src="/logo.png" alt="SwapSphere" className="footer-logo-image" />
+                            <img src="../../logo.png" alt="SwapSphere" className="footer-logo-image" />
                             <span>SwapSphere</span>
                         </div>
                         <p>Buy, Sell & Exchange items with people in your city.</p>

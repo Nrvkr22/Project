@@ -16,7 +16,7 @@ export const getOrCreateConversation = async (userId1, userId2, itemId = null, i
     const sortedIds = [userId1, userId2].sort();
     const conversationId = `${sortedIds[0]}_${sortedIds[1]}`;
 
-    const conversationRef = ref(realtimeDb, `conversations/${conversationId}`);
+    const conversationRef = ref(realtimeDb, `chats/${conversationId}`);
     const snapshot = await get(conversationRef);
 
     if (!snapshot.exists()) {
@@ -35,8 +35,8 @@ export const getOrCreateConversation = async (userId1, userId2, itemId = null, i
         });
     } else if (itemId && !snapshot.val().itemId) {
         // Update with item reference if provided
-        await set(ref(realtimeDb, `conversations/${conversationId}/itemId`), itemId);
-        await set(ref(realtimeDb, `conversations/${conversationId}/itemTitle`), itemTitle);
+        await set(ref(realtimeDb, `chats/${conversationId}/itemId`), itemId);
+        await set(ref(realtimeDb, `chats/${conversationId}/itemTitle`), itemTitle);
     }
 
     return conversationId;
@@ -44,7 +44,7 @@ export const getOrCreateConversation = async (userId1, userId2, itemId = null, i
 
 // Send a message
 export const sendMessage = async (conversationId, senderId, senderName, content) => {
-    const messagesRef = ref(realtimeDb, `messages/${conversationId}`);
+    const messagesRef = ref(realtimeDb, `chats/${conversationId}/messages`);
     const newMessageRef = push(messagesRef);
 
     const message = {
@@ -58,17 +58,17 @@ export const sendMessage = async (conversationId, senderId, senderName, content)
     await set(newMessageRef, message);
 
     // Update conversation's last message
-    const conversationRef = ref(realtimeDb, `conversations/${conversationId}`);
-    await set(ref(realtimeDb, `conversations/${conversationId}/lastMessage`), content);
-    await set(ref(realtimeDb, `conversations/${conversationId}/lastMessageAt`), Date.now());
-    await set(ref(realtimeDb, `conversations/${conversationId}/updatedAt`), Date.now());
+    const conversationRef = ref(realtimeDb, `chats/${conversationId}`);
+    await set(ref(realtimeDb, `chats/${conversationId}/lastMessage`), content);
+    await set(ref(realtimeDb, `chats/${conversationId}/lastMessageAt`), Date.now());
+    await set(ref(realtimeDb, `chats/${conversationId}/updatedAt`), Date.now());
 
     return { id: newMessageRef.key, ...message };
 };
 
 // Subscribe to messages in a conversation (real-time)
 export const subscribeToMessages = (conversationId, callback) => {
-    const messagesRef = ref(realtimeDb, `messages/${conversationId}`);
+    const messagesRef = ref(realtimeDb, `chats/${conversationId}/messages`);
 
     const unsubscribe = onValue(messagesRef, (snapshot) => {
         const messages = [];
@@ -90,7 +90,7 @@ export const subscribeToMessages = (conversationId, callback) => {
 
 // Get user's conversations
 export const getUserConversations = async (userId) => {
-    const conversationsRef = ref(realtimeDb, 'conversations');
+    const conversationsRef = ref(realtimeDb, 'chats');
     const snapshot = await get(conversationsRef);
 
     const conversations = [];
@@ -115,7 +115,7 @@ export const getUserConversations = async (userId) => {
 
 // Subscribe to user's conversations (real-time updates)
 export const subscribeToConversations = (userId, callback) => {
-    const conversationsRef = ref(realtimeDb, 'conversations');
+    const conversationsRef = ref(realtimeDb, 'chats');
 
     const unsubscribe = onValue(conversationsRef, (snapshot) => {
         const conversations = [];
@@ -146,7 +146,7 @@ export const getOtherUserId = (conversation, currentUserId) => {
 
 // Mark messages as read
 export const markMessagesAsRead = async (conversationId, userId) => {
-    const messagesRef = ref(realtimeDb, `messages/${conversationId}`);
+    const messagesRef = ref(realtimeDb, `chats/${conversationId}/messages`);
     const snapshot = await get(messagesRef);
 
     if (snapshot.exists()) {
@@ -159,10 +159,10 @@ export const markMessagesAsRead = async (conversationId, userId) => {
         });
 
         if (Object.keys(updates).length > 0) {
-            const messagesRef = ref(realtimeDb, `messages/${conversationId}`);
+            const messagesRef = ref(realtimeDb, `chats/${conversationId}/messages`);
             // Update each unread message
             for (const [path, value] of Object.entries(updates)) {
-                await set(ref(realtimeDb, `messages/${conversationId}/${path}`), value);
+                await set(ref(realtimeDb, `chats/${conversationId}/messages/${path}`), value);
             }
         }
     }

@@ -5,7 +5,6 @@ import './RateUser.css';
 const RateUser = ({ exchange, currentUserId, onClose, onSuccess }) => {
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
-    const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
 
@@ -31,7 +30,6 @@ const RateUser = ({ exchange, currentUserId, onClose, onSuccess }) => {
                 raterId: currentUserId,
                 ratedUserId: ratedUserId,
                 rating: rating,
-                comment: comment.trim(),
                 exchangeItemTitle: isProposer ? exchange.receiverItemTitle : exchange.proposerItemTitle,
             });
 
@@ -81,21 +79,12 @@ const RateUser = ({ exchange, currentUserId, onClose, onSuccess }) => {
                         {rating === 5 && 'Excellent!'}
                     </p>
 
-                    <div className="form-group">
-                        <label>Comment (optional)</label>
-                        <textarea
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            placeholder="Share your experience..."
-                            rows={3}
-                        />
-                    </div>
 
                     {error && <div className="error-message">{error}</div>}
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
-                            Skip
+                            Cancel
                         </button>
                         <button
                             type="submit"

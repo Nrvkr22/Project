@@ -113,7 +113,6 @@ const ProposeExchange = ({ targetItem, onClose, onSuccess }) => {
                         </div>
                     </div>
 
-                    <div className="exchange-arrow">🔄</div>
 
                     <div className="exchange-side">
                         <span className="exchange-label">You offer</span>

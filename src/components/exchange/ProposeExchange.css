@@ -36,13 +36,14 @@
 
 .exchange-item-card {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     padding: 0.875rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    text-align: left;
+    text-align: center;
     width: 100%;
     min-height: 80px;
 }
@@ -56,17 +57,24 @@
 }
 
 .exchange-item-card>div {
-    flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .exchange-item-card h4 {
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
     color: var(--text-primary);
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 .exchange-item-card .price {
@@ -87,13 +95,7 @@
     border-style: dashed;
 }
 
-.exchange-arrow {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    color: var(--text-muted);
-}
+
 
 .price-difference-info {
     text-align: center;
@@ -232,10 +234,7 @@
         width: 100%;
     }
 
-    .exchange-arrow {
-        transform: rotate(90deg);
-        padding: 0.25rem 0;
-    }
+
 
     .my-items-grid {
         grid-template-columns: repeat(2, 1fr);

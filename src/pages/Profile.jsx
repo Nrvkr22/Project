@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { getUserItems } from '../services/items';
+import { getCompletedExchanges } from '../services/exchanges';
+import { getUserRatings } from '../services/ratings';
 import { uploadImage } from '../services/cloudinary';
 import { indianCities } from '../utils/constants';
 import { formatDate, formatPrice } from '../utils/helpers';
@@ -16,6 +18,8 @@ const Profile = () => {
 
     const [profile, setProfile] = useState(null);
     const [userItems, setUserItems] = useState([]);
+    const [completedExchanges, setCompletedExchanges] = useState([]);
+    const [ratings, setRatings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -52,9 +56,15 @@ const Profile = () => {
                     location: profileData.location || '',
                 });
 
-                // Fetch user's active items
-                const items = await getUserItems(targetId, 'active');
+                // Fetch user's active items, completed exchanges, and ratings
+                const [items, exchanges, userRatings] = await Promise.all([
+                    getUserItems(targetId, 'active'),
+                    getCompletedExchanges(targetId),
+                    getUserRatings(targetId),
+                ]);
                 setUserItems(items);
+                setCompletedExchanges(exchanges);
+                setRatings(userRatings);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -240,6 +250,55 @@ const Profile = () => {
                     </div>
                 )}
             </div>
+
+            {/* Completed Exchanges Section */}
+            <div className="profile-content">
+                <h2>Completed Exchanges</h2>
+                {completedExchanges.length === 0 ? (
+                    <div className="empty-state">
+                        <span className="empty-icon">🔄</span>
+                        <h3>No completed exchanges yet</h3>
+                    </div>
+                ) : (
+                    <div className="exchanges-list">
+                        {completedExchanges.map((ex) => {
+                            const isProposer = ex.proposerId === (userId || user?.uid);
+                            const exchangeRating = ratings.find(r => r.exchangeId === ex.id && r.ratedUserId === (userId || user?.uid));
+                            return (
+                                <div key={ex.id} className="exchange-history-card">
+                                    <div className="exchange-history-items">
+                                        <div className="exchange-history-item">
+                                            <span className="exchange-history-label">Gave</span>
+                                            <span className="exchange-history-title">
+                                                {isProposer ? ex.proposerItemTitle : ex.receiverItemTitle}
+                                            </span>
+                                        </div>
+                                        <span className="exchange-history-arrow">⇄</span>
+                                        <div className="exchange-history-item">
+                                            <span className="exchange-history-label">Received</span>
+                                            <span className="exchange-history-title">
+                                                {isProposer ? ex.receiverItemTitle : ex.proposerItemTitle}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="exchange-history-meta">
+                                        {exchangeRating && (
+                                            <span className="exchange-history-rating">
+                                                {'⭐'.repeat(exchangeRating.rating)}
+                                            </span>
+                                        )}
+                                        <span className="exchange-history-date">
+                                            {formatDate(ex.completedAt || ex.createdAt)}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+
         </div>
     );
 };

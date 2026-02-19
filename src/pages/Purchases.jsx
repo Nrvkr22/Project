@@ -242,12 +242,20 @@ const PurchaseCard = ({
                     )}
 
                     {(purchase.status === 'pending' || purchase.status === 'confirmed') && (
-                        <Link
-                            to={`/chat?userId=${isReceived ? purchase.buyerId : purchase.sellerId}`}
-                            className="btn btn-secondary btn-sm"
-                        >
-                            💬 Chat
-                        </Link>
+                        <>
+                            <Link
+                                to={`/profile/${isReceived ? purchase.buyerId : purchase.sellerId}`}
+                                className="btn btn-secondary btn-sm"
+                            >
+                                View Profile
+                            </Link>
+                            <Link
+                                to={`/chat?userId=${isReceived ? purchase.buyerId : purchase.sellerId}`}
+                                className="btn btn-secondary btn-sm"
+                            >
+                                💬 Chat
+                            </Link>
+                        </>
                     )}
                 </div>
             </div>

@@ -350,12 +350,20 @@ const ExchangeCard = ({
                     )}
 
                     {(exchange.status === 'accepted' || exchange.status === 'pending') && (
-                        <Link
-                            to={`/chat?userId=${isReceived ? exchange.proposerId : exchange.receiverId}`}
-                            className="btn btn-secondary btn-sm"
-                        >
-                            💬 Chat
-                        </Link>
+                        <>
+                            <Link
+                                to={`/profile/${isReceived ? exchange.proposerId : exchange.receiverId}`}
+                                className="btn btn-secondary btn-sm"
+                            >
+                                View Profile
+                            </Link>
+                            <Link
+                                to={`/chat?userId=${isReceived ? exchange.proposerId : exchange.receiverId}`}
+                                className="btn btn-secondary btn-sm"
+                            >
+                                💬 Chat
+                            </Link>
+                        </>
                     )}
 
                     {isCompleted && !hasRated && (

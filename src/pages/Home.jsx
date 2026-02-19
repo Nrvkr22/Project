@@ -78,7 +78,7 @@ const Home = () => {
             <section className="categories-section">
                 <h2>Browse by Category</h2>
                 <div className="categories-grid">
-                    {categories.map((category) => (
+                    {categories.slice(0, 10).map((category) => (
                         <Link
                             key={category}
                             to={`/browse?category=${encodeURIComponent(category)}`}
@@ -123,6 +123,8 @@ const getCategoryIcon = (category) => {
         'Books': '📚',
         'Gaming': '🎮',
         'Collectibles': '🏆',
+        'Mobile Phones': '📲',
+        'Laptops & Computers': '💻',
         'Other': '📦',
     };
     return icons[category] || '📦';

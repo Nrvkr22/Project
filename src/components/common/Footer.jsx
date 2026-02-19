@@ -29,12 +29,6 @@ const Footer = () => {
                             <a href="/browse?category=Gaming">Gaming</a>
                         </div>
 
-                        <div className="footer-section">
-                            <h4>Support</h4>
-                            <a href="#">Help Center</a>
-                            <a href="#">Safety Tips</a>
-                            <a href="#">Contact Us</a>
-                        </div>
                     </div>
                 </div>
 

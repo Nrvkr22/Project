@@ -95,8 +95,8 @@ const Purchases = () => {
     };
 
     const tabs = [
-        { id: 'received', label: 'Buy Requests' },
-        { id: 'sent', label: 'My Orders' },
+        { id: 'received', label: 'Recieved' },
+        { id: 'sent', label: 'Sent' },
     ];
 
     return (

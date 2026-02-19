@@ -4,27 +4,36 @@ import { useAuth } from '../../context/AuthContext';
 import './Auth.css';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [forgotPassword, setForgotPassword] = useState(false);
-
-    const { login, resetPassword } = useAuth();
+    const { login, resetPassword, resendVerificationEmail } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
     const from = location.state?.from?.pathname || '/dashboard';
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(location.state?.message || '');
+    const [loading, setLoading] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [unverified, setUnverified] = useState(false);
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
+        setUnverified(false);
         setLoading(true);
 
         try {
-            await login(email, password);
+            const loggedInUser = await login(email, password);
+            if (!loggedInUser.emailVerified) {
+                setUnverified(true);
+                setError('Please verify your email before signing in. Check your inbox for the verification link.');
+                setLoading(false);
+                return;
+            }
             navigate(from, { replace: true });
         } catch (err) {
             console.error('Login error:', err);
@@ -91,6 +100,29 @@ const Login = () => {
 
                 {error && <div className="auth-error">{error}</div>}
                 {success && <div className="auth-success">{success}</div>}
+                {unverified && (
+                    <div className="auth-warning">
+                        <button
+                            type="button"
+                            className="resend-link"
+                            onClick={async () => {
+                                try {
+                                    await resendVerificationEmail();
+                                    setSuccess('Verification email resent! Check your inbox.');
+                                    setError('');
+                                } catch (err) {
+                                    if (err.code === 'auth/too-many-requests') {
+                                        setError('Too many requests. Please try again later.');
+                                    } else {
+                                        setError('Failed to resend. Please try again.');
+                                    }
+                                }
+                            }}
+                        >
+                            Resend Verification Email
+                        </button>
+                    </div>
+                )}
 
                 {forgotPassword ? (
                     <form onSubmit={handleForgotPassword} className="auth-form">

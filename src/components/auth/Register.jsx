@@ -69,7 +69,7 @@ const Register = () => {
                 formData.phone,
                 formData.location
             );
-            navigate('/dashboard');
+            navigate('/login', { state: { message: 'Account created! Check your email to verify your account before signing in.' } });
         } catch (err) {
             console.error('Registration error:', err);
             if (err.code === 'auth/email-already-in-use') {

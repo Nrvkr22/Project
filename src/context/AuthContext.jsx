@@ -5,7 +5,8 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    sendEmailVerification
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
@@ -67,6 +68,9 @@ export const AuthProvider = ({ children }) => {
         await setDoc(doc(db, 'users', firebaseUser.uid), userProfileData);
         setUserProfile(userProfileData);
 
+        // Send email verification
+        await sendEmailVerification(firebaseUser);
+
         return firebaseUser;
     };
 
@@ -83,6 +87,12 @@ export const AuthProvider = ({ children }) => {
 
     const resetPassword = async (email) => {
         await sendPasswordResetEmail(auth, email);
+    };
+
+    const resendVerificationEmail = async () => {
+        if (auth.currentUser) {
+            await sendEmailVerification(auth.currentUser);
+        }
     };
 
     const updateUserProfile = async (updates) => {
@@ -108,6 +118,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         resetPassword,
+        resendVerificationEmail,
         updateUserProfile,
         refreshUserProfile,
     };

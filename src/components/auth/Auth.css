@@ -157,6 +157,33 @@
   text-align: center;
 }
 
+.auth-warning {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #b45309;
+  padding: 0.875rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.resend-link {
+  background: none;
+  border: none;
+  color: #b45309;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.resend-link:hover {
+  color: #92400e;
+}
+
 .back-to-login {
   background: none;
   border: none;

@@ -10,7 +10,6 @@ const ProposeExchange = ({ targetItem, onClose, onSuccess }) => {
     const [myItems, setMyItems] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [additionalCash, setAdditionalCash] = useState(0);
-    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -79,7 +78,6 @@ const ProposeExchange = ({ targetItem, onClose, onSuccess }) => {
                 additionalCash: parseFloat(additionalCash) || 0,
                 priceDifference: Math.abs(targetItem.price - selectedItem.price),
                 paymentDirection: paymentInfo.payer,
-                message: message.trim(),
             };
 
             await createExchange(exchangeData);
@@ -190,15 +188,6 @@ const ProposeExchange = ({ targetItem, onClose, onSuccess }) => {
                         <span className="input-hint">Offer extra cash to make your proposal more attractive</span>
                     </div>
 
-                    <div className="form-group">
-                        <label>Message (optional)</label>
-                        <textarea
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Hi! I'd like to exchange my item for yours..."
-                            rows={3}
-                        />
-                    </div>
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={onClose}>

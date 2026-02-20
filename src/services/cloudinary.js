@@ -1,9 +1,18 @@
+import imageCompression from 'browser-image-compression';
+
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 export const uploadImage = async (file) => {
+    // Compress image before upload
+    const compressedFile = await imageCompression(file, {
+        maxSizeMB: 5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+    });
+
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', compressedFile);
     formData.append('upload_preset', UPLOAD_PRESET);
     formData.append('folder', 'swapsphere');
 

@@ -3,6 +3,7 @@ import {
     doc,
     addDoc,
     updateDoc,
+    deleteDoc,
     getDoc,
     getDocs,
     query,
@@ -219,4 +220,10 @@ export const getPaymentDirection = (proposerItemPrice, receiverItemPrice) => {
         return { payer: 'receiver', amount: Math.abs(diff) };
     }
     return { payer: 'none', amount: 0 };
+};
+
+// Delete an exchange
+export const deleteExchange = async (exchangeId) => {
+    const docRef = doc(db, EXCHANGES_COLLECTION, exchangeId);
+    await deleteDoc(docRef);
 };

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 import {
     getReceivedExchanges,
     getSentExchanges,
@@ -8,7 +10,8 @@ import {
     acceptExchange,
     declineExchange,
     cancelExchange,
-    completeExchange
+    completeExchange,
+    deleteExchange
 } from '../services/exchanges';
 import { markItemAsExchanged } from '../services/items';
 import { hasRatedExchange } from '../services/ratings';
@@ -111,6 +114,18 @@ const Exchanges = () => {
         }
     };
 
+    const handleDelete = async (exchangeId) => {
+        setActionLoading(exchangeId);
+        try {
+            await deleteExchange(exchangeId);
+            fetchExchanges();
+        } catch (error) {
+            console.error('Error deleting exchange:', error);
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
     const tabs = [
         { id: 'received', label: 'Received' },
         { id: 'sent', label: 'Sent' },
@@ -171,6 +186,7 @@ const Exchanges = () => {
                                 onDecline={handleDecline}
                                 onCancel={handleCancel}
                                 onComplete={handleComplete}
+                                onDelete={handleDelete}
                                 actionLoading={actionLoading}
                             />
                         ))}
@@ -218,10 +234,12 @@ const ExchangeCard = ({
     onDecline,
     onCancel,
     onComplete,
+    onDelete,
     actionLoading
 }) => {
     const [showRateModal, setShowRateModal] = useState(false);
     const [hasRated, setHasRated] = useState(false);
+    const [itemDeleted, setItemDeleted] = useState(false);
     const isLoading = actionLoading === exchange.id;
 
     useEffect(() => {
@@ -229,6 +247,24 @@ const ExchangeCard = ({
             checkIfRated();
         }
     }, [isCompleted, currentUserId]);
+
+    useEffect(() => {
+        checkItemsExist();
+    }, []);
+
+    const checkItemsExist = async () => {
+        try {
+            const [proposerItem, receiverItem] = await Promise.all([
+                getDoc(doc(db, 'items', exchange.proposerItemId)),
+                getDoc(doc(db, 'items', exchange.receiverItemId)),
+            ]);
+            if (!proposerItem.exists() || !receiverItem.exists()) {
+                setItemDeleted(true);
+            }
+        } catch (err) {
+            console.error('Error checking items:', err);
+        }
+    };
 
     const checkIfRated = async () => {
         try {
@@ -254,6 +290,11 @@ const ExchangeCard = ({
 
     return (
         <div className="exchange-card">
+            {itemDeleted && (
+                <div className="exchange-deleted-banner">
+                    ⚠️ One of the items in this exchange has been deleted by its owner.
+                </div>
+            )}
             <div className="exchange-items">
                 <div className="exchange-item">
                     <img
@@ -310,7 +351,7 @@ const ExchangeCard = ({
                 </div>
 
                 <div className="exchange-actions">
-                    {isReceived && exchange.status === 'pending' && (
+                    {isReceived && exchange.status === 'pending' && !itemDeleted && (
                         <>
                             <button
                                 className="btn btn-success btn-sm"
@@ -329,7 +370,7 @@ const ExchangeCard = ({
                         </>
                     )}
 
-                    {isReceived && exchange.status === 'accepted' && (
+                    {isReceived && exchange.status === 'accepted' && !itemDeleted && (
                         <button
                             className="btn btn-primary btn-sm"
                             onClick={() => onComplete(exchange)}
@@ -364,6 +405,16 @@ const ExchangeCard = ({
                                 💬 Chat
                             </Link>
                         </>
+                    )}
+
+                    {itemDeleted && (
+                        <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => onDelete(exchange.id)}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? '...' : '🗑 Delete'}
+                        </button>
                     )}
 
                     {isCompleted && !hasRated && (

@@ -175,6 +175,13 @@ const Chat = () => {
         return otherUsers[otherId] || { name: 'User' };
     };
 
+    const getUnreadCount = (conversation) => {
+        if (!conversation.messages) return 0;
+        return Object.values(conversation.messages).filter(
+            (msg) => msg.senderId !== user.uid && !msg.read
+        ).length;
+    };
+
     const formatMessageTime = (timestamp) => {
         if (!timestamp) return '';
         const date = new Date(timestamp);
@@ -222,6 +229,7 @@ const Chat = () => {
                         <div className="conversations-list">
                             {conversations.map((conv) => {
                                 const otherUser = getOtherUserInfo(conv);
+                                const unread = getUnreadCount(conv);
                                 return (
                                     <button
                                         key={conv.id}
@@ -236,7 +244,10 @@ const Chat = () => {
                                             )}
                                         </div>
                                         <div className="conv-info">
-                                            <h4>{otherUser.name || 'User'}</h4>
+                                            <h4>
+                                                {otherUser.name || 'User'}
+                                                {unread > 0 && <span className="unread-count">{unread}</span>}
+                                            </h4>
                                             {conv.itemTitle && (
                                                 <span className="conv-item-ref">Re: {conv.itemTitle}</span>
                                             )}

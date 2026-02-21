@@ -167,3 +167,27 @@ export const markMessagesAsRead = async (conversationId, userId) => {
         }
     }
 };
+
+// Subscribe to total unread message count for a user
+export const subscribeToUnreadCount = (userId, callback) => {
+    const chatsRef = ref(realtimeDb, 'chats');
+
+    const unsubscribe = onValue(chatsRef, (snapshot) => {
+        let totalUnread = 0;
+        if (snapshot.exists()) {
+            snapshot.forEach((child) => {
+                const data = child.val();
+                if (data.participants && data.participants[userId] && data.messages) {
+                    Object.values(data.messages).forEach((msg) => {
+                        if (msg.senderId !== userId && !msg.read) {
+                            totalUnread++;
+                        }
+                    });
+                }
+            });
+        }
+        callback(totalUnread);
+    });
+
+    return unsubscribe;
+};

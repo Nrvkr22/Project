@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { subscribeToUnreadCount } from '../../services/chat';
 import './Navbar.css';
 
 const Navbar = () => {
     const { user, userProfile, logout } = useAuth();
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    useEffect(() => {
+        if (!user) return;
+        const unsubscribe = subscribeToUnreadCount(user.uid, setUnreadCount);
+        return () => unsubscribe();
+    }, [user]);
 
     const handleLogout = async () => {
         try {
@@ -40,7 +48,9 @@ const Navbar = () => {
                             </Link>
                             <Link to="/exchanges" className="nav-link" onClick={closeMobileMenu}>Exchanges</Link>
                             <Link to="/purchases" className="nav-link" onClick={closeMobileMenu}>Purchases</Link>
-                            <Link to="/chat" className="nav-link" onClick={closeMobileMenu}>Chat</Link>
+                            <Link to="/chat" className="nav-link" onClick={closeMobileMenu}>
+                                Chat{unreadCount > 0 && <span className="unread-count">{unreadCount}</span>}
+                            </Link>
 
                             {/* These only show on mobile */}
                             <Link to="/dashboard" className="nav-link mobile-only" onClick={closeMobileMenu}>Dashboard</Link>

@@ -73,6 +73,13 @@
     font-weight: 600;
 }
 
+.unread-count {
+    color: #ef4444;
+    font-weight: 700;
+    margin-left: 0.25rem;
+    font-size: 0.9rem;
+}
+
 .nav-link-primary:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-glow);

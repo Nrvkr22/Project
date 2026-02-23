@@ -130,7 +130,7 @@ const ItemDetail = () => {
                             src={item.images?.[activeImage] || 'https://via.placeholder.com/600x400?text=No+Image'}
                             alt={item.title}
                         />
-                        {item.exchangeType !== 'sell_only' && (
+                        {item.listingType !== 'sell_only' && (
                             <span className="exchange-badge-large">🔄 Open to Exchange</span>
                         )}
                     </div>
@@ -213,7 +213,7 @@ const ItemDetail = () => {
                         ) : (
                             <>
                                 {/* Buy Button - for sell_only or open_to_exchange */}
-                                {user && item.exchangeType !== 'exchange_only' && (
+                                {user && item.listingType !== 'exchange_only' && (
                                     hasPendingBuy ? (
                                         <button className="btn btn-secondary" disabled>
                                             ⏳ Buy Request Pending
@@ -229,7 +229,7 @@ const ItemDetail = () => {
                                 )}
 
                                 {/* Exchange Button - for exchange_only or open_to_exchange */}
-                                {user && item.exchangeType !== 'sell_only' && (
+                                {user && item.listingType !== 'sell_only' && (
                                     <button
                                         className="btn btn-primary"
                                         onClick={() => setShowExchangeModal(true)}

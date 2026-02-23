@@ -100,9 +100,9 @@ const Exchanges = () => {
     };
 
     const handleComplete = async (exchange) => {
-        setActionLoading(exchange.id);
+        setActionLoading(exchange.exchangeId);
         try {
-            await completeExchange(exchange.id);
+            await completeExchange(exchange.exchangeId);
             // Mark both items as exchanged
             await markItemAsExchanged(exchange.proposerItemId);
             await markItemAsExchanged(exchange.receiverItemId);
@@ -176,7 +176,7 @@ const Exchanges = () => {
                     <div className="exchanges-list">
                         {exchanges.map((exchange) => (
                             <ExchangeCard
-                                key={exchange.id}
+                                key={exchange.exchangeId}
                                 exchange={exchange}
                                 currentUserId={user.uid}
                                 isReceived={activeTab === 'received'}
@@ -240,7 +240,7 @@ const ExchangeCard = ({
     const [showRateModal, setShowRateModal] = useState(false);
     const [hasRated, setHasRated] = useState(false);
     const [itemDeleted, setItemDeleted] = useState(false);
-    const isLoading = actionLoading === exchange.id;
+    const isLoading = actionLoading === exchange.exchangeId;
 
     useEffect(() => {
         if (isCompleted && currentUserId) {
@@ -268,7 +268,7 @@ const ExchangeCard = ({
 
     const checkIfRated = async () => {
         try {
-            const rated = await hasRatedExchange(exchange.id, currentUserId);
+            const rated = await hasRatedExchange(exchange.exchangeId, currentUserId);
             setHasRated(rated);
         } catch (err) {
             console.error('Error checking rating:', err);
@@ -355,14 +355,14 @@ const ExchangeCard = ({
                         <>
                             <button
                                 className="btn btn-success btn-sm"
-                                onClick={() => onAccept(exchange.id)}
+                                onClick={() => onAccept(exchange.exchangeId)}
                                 disabled={isLoading}
                             >
                                 {isLoading ? '...' : '✓ Accept'}
                             </button>
                             <button
                                 className="btn btn-danger btn-sm"
-                                onClick={() => onDecline(exchange.id)}
+                                onClick={() => onDecline(exchange.exchangeId)}
                                 disabled={isLoading}
                             >
                                 {isLoading ? '...' : '✗ Decline'}
@@ -383,7 +383,7 @@ const ExchangeCard = ({
                     {isSent && exchange.status === 'pending' && (
                         <button
                             className="btn btn-secondary btn-sm"
-                            onClick={() => onCancel(exchange.id)}
+                            onClick={() => onCancel(exchange.exchangeId)}
                             disabled={isLoading}
                         >
                             {isLoading ? '...' : 'Cancel'}
@@ -410,7 +410,7 @@ const ExchangeCard = ({
                     {itemDeleted && (
                         <button
                             className="btn btn-danger btn-sm"
-                            onClick={() => onDelete(exchange.id)}
+                            onClick={() => onDelete(exchange.exchangeId)}
                             disabled={isLoading}
                         >
                             {isLoading ? '...' : '🗑 Delete'}

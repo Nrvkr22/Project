@@ -66,7 +66,7 @@ export const getReceivedExchanges = async (userId, status = null) => {
         const exchanges = [];
 
         querySnapshot.forEach((doc) => {
-            exchanges.push({ id: doc.id, ...doc.data() });
+            exchanges.push({ exchangeId: doc.id, ...doc.data() });
         });
 
         // Sort by createdAt client-side
@@ -104,7 +104,7 @@ export const getSentExchanges = async (userId, status = null) => {
         const exchanges = [];
 
         querySnapshot.forEach((doc) => {
-            exchanges.push({ id: doc.id, ...doc.data() });
+            exchanges.push({ exchangeId: doc.id, ...doc.data() });
         });
 
         // Sort by createdAt client-side
@@ -147,13 +147,13 @@ export const getCompletedExchanges = async (userId) => {
         const seenIds = new Set();
 
         snapshot1.forEach((doc) => {
-            exchanges.push({ id: doc.id, ...doc.data() });
+            exchanges.push({ exchangeId: doc.id, ...doc.data() });
             seenIds.add(doc.id);
         });
 
         snapshot2.forEach((doc) => {
             if (!seenIds.has(doc.id)) {
-                exchanges.push({ id: doc.id, ...doc.data() });
+                exchanges.push({ exchangeId: doc.id, ...doc.data() });
             }
         });
 

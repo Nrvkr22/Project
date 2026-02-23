@@ -51,7 +51,7 @@ export const getUserRatings = async (userId) => {
     const ratings = [];
 
     snapshot.forEach((doc) => {
-        ratings.push({ id: doc.id, ...doc.data() });
+        ratings.push({ rating_id: doc.id, ...doc.data() });
     });
 
     // Sort by creation date (newest first)
@@ -97,5 +97,5 @@ export const getRatingForExchange = async (exchangeId, raterId) => {
     if (snapshot.empty) return null;
 
     const doc = snapshot.docs[0];
-    return { id: doc.id, ...doc.data() };
+    return { rating_id: doc.id, ...doc.data() };
 };

@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
         // Create user profile in Firestore
         const userProfileData = {
-            uid: firebaseUser.uid,
+            user_id: firebaseUser.uid,
             email,
             name,
             phone,

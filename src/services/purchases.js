@@ -65,7 +65,7 @@ export const getReceivedPurchases = async (sellerId, status = null) => {
         const purchases = [];
 
         querySnapshot.forEach((doc) => {
-            purchases.push({ id: doc.id, ...doc.data() });
+            purchases.push({ purchaseId: doc.id, ...doc.data() });
         });
 
         // Sort by createdAt client-side
@@ -103,7 +103,7 @@ export const getSentPurchases = async (buyerId, status = null) => {
         const purchases = [];
 
         querySnapshot.forEach((doc) => {
-            purchases.push({ id: doc.id, ...doc.data() });
+            purchases.push({ purchaseId: doc.id, ...doc.data() });
         });
 
         purchases.sort((a, b) => {

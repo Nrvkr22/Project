@@ -265,7 +265,7 @@ const ItemCard = ({ item }) => {
         <Link to={`/item/${item.id}`} className="item-card">
             <div className="item-image">
                 <img src={mainImage} alt={item.title} loading="lazy" />
-                {item.exchangeType !== 'sell_only' && (
+                {item.listingType !== 'sell_only' && (
                     <span className="exchange-badge">🔄 Exchange</span>
                 )}
             </div>

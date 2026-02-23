@@ -82,9 +82,9 @@ const Purchases = () => {
     };
 
     const handleComplete = async (purchase) => {
-        setActionLoading(purchase.id);
+        setActionLoading(purchase.purchaseId);
         try {
-            await completePurchase(purchase.id);
+            await completePurchase(purchase.purchaseId);
             await markItemAsSold(purchase.itemId);
             fetchPurchases();
         } catch (error) {
@@ -141,7 +141,7 @@ const Purchases = () => {
                     <div className="purchases-list">
                         {purchases.map((purchase) => (
                             <PurchaseCard
-                                key={purchase.id}
+                                key={purchase.purchaseId}
                                 purchase={purchase}
                                 isReceived={activeTab === 'received'}
                                 onConfirm={handleConfirm}
@@ -167,7 +167,7 @@ const PurchaseCard = ({
     onComplete,
     actionLoading
 }) => {
-    const isLoading = actionLoading === purchase.id;
+    const isLoading = actionLoading === purchase.purchaseId;
 
     const getStatusBadge = (status) => {
         const badges = {
@@ -206,14 +206,14 @@ const PurchaseCard = ({
                         <>
                             <button
                                 className="btn btn-success btn-sm"
-                                onClick={() => onConfirm(purchase.id)}
+                                onClick={() => onConfirm(purchase.purchaseId)}
                                 disabled={isLoading}
                             >
                                 {isLoading ? '...' : '✓ Confirm'}
                             </button>
                             <button
                                 className="btn btn-danger btn-sm"
-                                onClick={() => onDecline(purchase.id)}
+                                onClick={() => onDecline(purchase.purchaseId)}
                                 disabled={isLoading}
                             >
                                 {isLoading ? '...' : '✗ Decline'}
@@ -234,7 +234,7 @@ const PurchaseCard = ({
                     {!isReceived && purchase.status === 'pending' && (
                         <button
                             className="btn btn-secondary btn-sm"
-                            onClick={() => onCancel(purchase.id)}
+                            onClick={() => onCancel(purchase.purchaseId)}
                             disabled={isLoading}
                         >
                             {isLoading ? '...' : 'Cancel'}

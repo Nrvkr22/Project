@@ -19,7 +19,7 @@ const CreateListing = () => {
         condition: '',
         category: '',
         location: userProfile?.location || '',
-        exchangeType: 'open_to_exchange',
+        listingType: 'open_to_exchange',
     });
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
@@ -45,7 +45,7 @@ const CreateListing = () => {
                     condition: item.condition,
                     category: item.category,
                     location: item.location,
-                    exchangeType: item.exchangeType,
+                    listingType: item.listingType,
                 });
                 setExistingImages(item.images || []);
             } else {
@@ -324,9 +324,9 @@ const CreateListing = () => {
                             <div className="form-group">
                                 <label htmlFor="exchangeType">Exchange Preference *</label>
                                 <select
-                                    id="exchangeType"
-                                    name="exchangeType"
-                                    value={formData.exchangeType}
+                                    id="listingType"
+                                    name="listingType"
+                                    value={formData.listingType}
                                     onChange={handleChange}
                                 >
                                     {exchangeTypes.map((type) => (

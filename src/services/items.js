@@ -214,7 +214,7 @@ export const getUserExchangeableItems = async (userId) => {
         collection(db, ITEMS_COLLECTION),
         where('userId', '==', userId),
         where('status', '==', 'active'),
-        where('exchangeType', 'in', ['open_to_exchange', 'exchange_only']),
+        where('listingType', 'in', ['open_to_exchange', 'exchange_only']),
         orderBy('createdAt', 'desc')
     );
 

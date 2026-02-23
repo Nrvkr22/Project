@@ -26,7 +26,7 @@ const ProposeExchange = ({ targetItem, onClose, onSuccess }) => {
             // Filter out the target item if user owns it (shouldn't happen, but safety)
             const exchangeableItems = items.filter(
                 (item) => item.id !== targetItem.id &&
-                    (item.exchangeType === 'open_to_exchange' || item.exchangeType === 'exchange_only')
+                    (item.listingType === 'open_to_exchange' || item.listingType === 'exchange_only')
             );
             setMyItems(exchangeableItems);
         } catch (err) {

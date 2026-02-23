@@ -26,7 +26,7 @@ const RateUser = ({ exchange, currentUserId, onClose, onSuccess }) => {
 
         try {
             await createRating({
-                exchangeId: exchange.id,
+                exchangeId: exchange.exchangeId,
                 raterId: currentUserId,
                 ratedUserId: ratedUserId,
                 rating: rating,
